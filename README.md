@@ -25,6 +25,26 @@ Runs **100% locally on your machine** — no external servers, database installa
 
 ---
 
+## 🎨 UI/UX Features & Design Overhaul
+
+- 🌗 **Dark & Light Mode Support:**
+  - One-click toggle switch located in the top navigation bar.
+  - Automatically respects system preferences on initial visit and persists user selection across sessions in `localStorage`.
+  - Accessible via keyboard shortcut: <kbd>Shift</kbd> + <kbd>D</kbd>.
+  - Built with dynamic CSS design tokens ensuring high legibility and contrast across both themes without color clipping.
+- 📐 **Non-Obtrusive Layout & Floating Copilot Clearance:**
+  - Added bottom padding clearance (`pb-36`) across all views.
+  - Implemented sticky desktop & mobile floating action bars (`.action-bar`) with responsive right-side margin offsets.
+  - The floating bottom-right AI Copilot button ("Need help?") **never obstructs** navigation buttons, inputs, or control actions.
+- ⚡ **Productive UX & Keyboard Ergonomics:**
+  - **Instant Scan:** Press <kbd>Enter</kbd> inside the URL input to immediately trigger form parsing.
+  - **Quick Stepper:** `−` and `+` adjustment buttons on numerical respondent inputs.
+  - **Modal & Chat Dismissal:** Press <kbd>Esc</kbd> to dismiss confirmation dialogs or close the AI chat window.
+  - **Quick AI Activation:** Press <kbd>Shift</kbd> + <kbd>?</kbd> from anywhere on the page to toggle the AI Copilot.
+  - **Step-by-Step Navigation:** Interactive sticky stepper tracking completed stages with checkmarks (✓).
+
+---
+
 ## 🛠️ Languages, Frameworks & Libraries Used
 
 | Component | Technology | Version / Spec | Purpose |
@@ -32,9 +52,10 @@ Runs **100% locally on your machine** — no external servers, database installa
 | **Backend Runtime** | **Python** | 3.10+ | Core server, data processing, and automation engine |
 | **Web Server** | **Flask** | $\ge 3.0.0$ | Local lightweight REST API and web routing framework (`threaded=True`) |
 | **HTTP Client** | **Requests** | $\ge 2.31.0$ | Form scraping and direct `/formResponse` HTTP submissions with connection isolation |
-| **Frontend Scripting**| **JavaScript (ES6+)** | Modern Vanilla JS | Interactive UI controller, real-time polling, state synchronization, and DOM manipulation |
-| **UI Styling** | **Tailwind CSS** | CDN (Tailwind 3) | Modern dark-mode layout, responsive cards, modals, and design system |
-| **Typography & Icons** | **Google Fonts & SVG** | Inter, JetBrains Mono | High-legibility typography and visual indicators |
+| **Frontend Scripting**| **JavaScript (ES6+)** | Vanilla JS (`app.js`, `ui.js`) | Reactive UI controller, real-time polling, state sync, DOM updates, and theme handling |
+| **UI Styling** | **Tailwind CSS** | CDN (Tailwind 3) + CSS Tokens | Modern responsive design system with CSS custom property theming |
+| **Markdown & Tables** | **Marked.js** | CDN (`marked.min.js`) | Clean formatting and responsive table rendering for AI Copilot responses |
+| **Typography & Icons** | **Google Fonts & SVG** | Inter, JetBrains Mono | High-legibility typography and crisp scalable vector interface icons |
 | **Windows Launcher** | **Batch Script (.bat)**| Windows CMD | One-click local application startup without terminal commands |
 | **AI LLM Engine** | **Groq API** | `openai/gpt-oss-20b` | Built-in AI Copilot grounded in the FormPilot System Knowledge Base |
 
@@ -55,7 +76,7 @@ FormPilot includes a floating, built-in **AI Copilot** accessible from the botto
    GROQ_MODEL=openai/gpt-oss-20b
    ```
 3. Your real `.env` file is protected by `.gitignore` and will never be committed to Git.
-4. Open the web app and click the **"FormPilot AI Helper"** pill at the bottom-right corner to ask any question about operating, configuring, or troubleshooting FormPilot!
+4. Open the web app and click the **"Need help?"** pill at the bottom-right corner (or press <kbd>Shift</kbd> + <kbd>?</kbd>) to ask any question about operating, configuring, or troubleshooting FormPilot!
 
 ---
 
@@ -74,10 +95,11 @@ testing 1/
 ├── start.bat                  # 1-click Windows launcher
 ├── requirements.txt           # Python package dependencies
 ├── templates/
-│   └── index.html             # Single-Page Application (SPA) HTML interface
+│   └── index.html             # Responsive Single-Page Application (SPA) HTML interface
 └── static/
-    ├── app.js                 # Frontend engine, event handlers & live poll controller
-    └── style.css              # Custom styling, animations, and scrollbars
+    ├── app.js                 # Frontend engine, form state & live execution poll controller
+    ├── ui.js                  # Theme switcher (dark/light), shortcuts & UX controls
+    └── style.css              # Custom styling, CSS variable theme tokens, animations & scrollbars
 ```
 
 ### Module Responsibilities:
@@ -92,6 +114,7 @@ testing 1/
   - `POST /api/pause-submission` & `POST /api/resume-submission`: Real-time execution control.
   - `POST /api/stop-submission`: Safely aborts ongoing submissions.
   - `GET /api/status`: Provides live metrics, progress percentage, countdown timers, and terminal logs.
+  - `POST /api/ai/chat`: Handles chat requests grounded in `system_knowledge.json`.
 
 #### 2. [`form_parser.py`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/form_parser.py)
 - **URL Normalization:** Supports `forms.gle` shortlinks, `/viewform`, `/edit`, `/prefill`, and query parameters (`?usp=sharing`, etc.).
@@ -109,11 +132,12 @@ testing 1/
 - **Sub-Second Sleep Interruptibility:** Long sleep intervals (e.g. 5 minutes) sleep in 0.3-second increments, enabling instant **Pause** or **Stop** without waiting for the timer to elapse.
 - **Live Countdown State:** Exposes remaining seconds for the active time gap to the frontend.
 
-#### 5. [`templates/index.html`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/templates/index.html) & [`static/app.js`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/static/app.js)
-- **Step 1: Connect Form:** Public access advisory, URL input box, error diagnostics, and 1-click Demo Survey loader.
-- **Step 2: Configure & Scale:** Target respondent counter, College Department tag chips manager, Likert grid matrix with increment/decrement counters, and custom delay intervals table.
-- **Step 3: Preview & Verify:** Full tabular respondent preview, "Re-Shuffle Order" button, and JSON dataset exporter.
-- **Step 4: Live Execution:** Real-time progress bar, live countdown widget, activity stream, and the **Completion Actions Card** (Re-Run Automation, Change Rating/Responses, Home).
+#### 5. [`templates/index.html`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/templates/index.html), [`static/app.js`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/static/app.js) & [`static/ui.js`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/static/ui.js)
+- **Step 1: Connect Form:** Public access checklist, URL input with `Enter` key shortcut, error diagnostics, and 1-click Demo Survey loader.
+- **Step 2: Configure & Scale:** Target respondent counter with `−` / `+` steppers, text variation tags, Likert grid matrix with dynamic counters, custom delay interval table, and a sticky action bar.
+- **Step 3: Preview & Verify:** Sticky-header tabular respondent preview with alternating row zebra stripes, "Re-Shuffle Order" button, and JSON dataset exporter.
+- **Step 4: Live Execution:** Real-time progress bar, live countdown widget, collapsible activity stream, and the **Completion Actions Card** (Re-Run Automation, Change Rating/Responses, Home).
+- **Dark/Light Mode & Shortcuts (`ui.js`):** Theme toggle with `localStorage` persistence, OS auto-detection, keyboard shortcuts (<kbd>Shift</kbd>+<kbd>D</kbd>, <kbd>Shift</kbd>+<kbd>?</kbd>, <kbd>Esc</kbd>), and input steppers.
 
 ---
 
@@ -130,13 +154,13 @@ testing 1/
 
 ### Starting the Application
 - Simply double-click [`start.bat`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/start.bat), or run:
-  ```powershell
-  python app.py
-  ```
+   ```powershell
+   python app.py
+   ```
 - Open your browser to:
-  ```text
-  http://127.0.0.1:5000
-  ```
+   ```text
+   http://127.0.0.1:5000
+   ```
 
 ---
 
