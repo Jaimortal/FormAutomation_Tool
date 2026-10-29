@@ -126,22 +126,11 @@ function switchStep(stepNumber) {
   // Update Stepper Badges
   for (let i = 1; i <= 4; i++) {
     const navItem = document.getElementById(`step-nav-${i}`);
-    const badgeNum = navItem.querySelector("span:first-child");
-    const label = navItem.querySelector("span:last-child");
-
-    if (i === stepNumber) {
-      navItem.classList.remove("opacity-50");
-      badgeNum.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-brand-500 text-slate-950";
-      label.className = "text-sm font-semibold text-slate-100";
-    } else if (i < stepNumber) {
-      navItem.classList.remove("opacity-50");
-      badgeNum.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-800 text-brand-400";
-      label.className = "text-sm font-semibold text-slate-300";
-    } else {
-      navItem.classList.add("opacity-50");
-      badgeNum.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-800 text-slate-400";
-      label.className = "text-sm font-semibold text-slate-400";
-    }
+    // Visual state is handled by .is-active / .is-done in style.css
+    navItem.classList.toggle("is-active", i === stepNumber);
+    navItem.classList.toggle("is-done", i < stepNumber);
+    if (i === stepNumber) navItem.setAttribute("aria-current", "step");
+    else navItem.removeAttribute("aria-current");
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
