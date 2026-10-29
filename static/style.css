@@ -1,0 +1,53 @@
+/* Custom styling for FormPilot */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 1);
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Likert grid cell highlight on hover */
+.likert-counter-box {
+  transition: all 0.15s ease-in-out;
+}
+.likert-counter-box:focus-within {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+}
+
+/* Tag chip animation */
+.tag-chip {
+  transition: all 0.15s ease;
+}
+.tag-chip:hover {
+  border-color: rgba(99, 102, 241, 0.6);
+}
+

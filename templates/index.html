@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FormPilot — Google Forms Intelligent Automation Studio</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-white to-indigo-300">FormPilot</h1>
+          <p class="text-xs text-slate-400 font-medium">Local Google Forms Intelligent Automation Studio</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Local Engine Ready
+        </span>
+        <button id="btn-load-sample" class="text-xs px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Load Demo Survey</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Stepper Navigation -->
+    <nav class="flex items-center justify-between border border-slate-800 rounded-2xl bg-slate-900/60 p-3 shadow-sm backdrop-blur-sm">
+      <div class="flex items-center space-x-2 sm:space-x-4 w-full">
+        <div id="step-nav-1" class="step-badge active flex items-center space-x-2 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-brand-500 text-slate-950">1</span>
+          <span class="text-sm font-semibold text-slate-100">Connect Form</span>
+        </div>
+        <div class="flex-1 h-0.5 bg-slate-800"></div>
+        <div id="step-nav-2" class="step-badge opacity-50 flex items-center space-x-2 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-800 text-slate-400">2</span>
+          <span class="text-sm font-semibold text-slate-400">Configure & Scale</span>
+        </div>
+        <div class="flex-1 h-0.5 bg-slate-800"></div>
+        <div id="step-nav-3" class="step-badge opacity-50 flex items-center space-x-2 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-800 text-slate-400">3</span>
+          <span class="text-sm font-semibold text-slate-400">Preview & Verify</span>
+        </div>
+        <div class="flex-1 h-0.5 bg-slate-800"></div>
+        <div id="step-nav-4" class="step-badge opacity-50 flex items-center space-x-2 px-3 py-1.5 rounded-xl transition-all cursor-pointer">
+          <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-slate-800 text-slate-400">4</span>
+          <span class="text-sm font-semibold text-slate-400">Live Execution</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- SECTION 1: Connect Form & Notice -->
+    <section id="section-connect" class="space-y-6">
+      <!-- Important Notice Alert -->
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 backdrop-blur-sm relative overflow-hidden">
+        <div class="flex items-start space-x-3.5">
+          <div class="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0 mt-0.5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-sm font-bold text-amber-200">Crucial Requirement: Google Form Must Be Public</h3>
+            <p class="text-xs text-amber-200/80 leading-relaxed">
+              Your Google Form <strong>must be public (accessible by Anyone with the link)</strong>. In your Google Form settings, ensure:
+              <span class="font-semibold text-amber-100 underline decoration-amber-400/50">"Limit to 1 response" is turned OFF</span> and <span class="font-semibold text-amber-100 underline decoration-amber-400/50">"Restrict to organization users" is disabled</span>. Forms requiring Google Sign-In cannot receive direct automated submissions without authentication credentials.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL Input Box Card -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl backdrop-blur-sm space-y-4">
+        <div>
+          <h2 class="text-base font-bold text-slate-100 flex items-center space-x-2">
+            <span>Scan Google Form Structure</span>
+          </h2>
+          <p class="text-xs text-slate-400">Paste your Google Form link (<code class="text-brand-400 bg-slate-800 px-1.5 py-0.5 rounded">/viewform</code>, <code class="text-brand-400 bg-slate-800 px-1.5 py-0.5 rounded">forms.gle/...</code>, <code class="text-brand-400 bg-slate-800 px-1.5 py-0.5 rounded">/edit</code>, or pre-filled link). FormPilot will scan all sections, Likert scale grids, and questions.</p>
+        </div>
+
+        <!-- Inline Error Banner -->
+        <div id="scan-error-alert" class="hidden rounded-xl bg-rose-500/10 border border-rose-500/30 p-4 text-xs text-rose-200 space-y-1">
+          <div class="font-bold flex items-center space-x-1.5 text-rose-300">
+            <svg class="w-4 h-4 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Scan Error</span>
+          </div>
+          <div id="scan-error-message" class="font-mono whitespace-pre-line text-rose-200/90 pl-5.5"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <input type="text" id="input-form-url" placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                   class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all font-mono">
+          </div>
+          <button id="btn-scan" class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center space-x-2 shrink-0">
+            <svg id="scan-spinner" class="hidden w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+            <span id="scan-btn-text">Scan & Parse Form</span>
+          </button>
+        </div>
+
+        <!-- Optional Manual HTML fallback accordion -->
+        <details class="text-xs text-slate-400 pt-2 border-t border-slate-800">
+          <summary class="cursor-pointer hover:text-slate-200 select-none font-medium">Alternative: Paste Form HTML directly (If your network blocks Google scraping)</summary>
+          <div class="mt-3 space-y-2">
+            <p class="text-slate-500">Right click your form in browser -> View Page Source -> Copy & Paste HTML below:</p>
+            <textarea id="input-form-html" rows="4" placeholder="Paste <html> source here..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 font-mono focus:outline-none focus:ring-1 focus:ring-brand-500"></textarea>
+            <button id="btn-parse-html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200">Parse Raw HTML</button>
+          </div>
+        </details>
+      </div>
+
+      <!-- Scanned Form Summary (Hidden by default, shown upon scan) -->
+      <div id="form-summary-card" class="hidden rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl backdrop-blur-sm space-y-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/30 mb-1.5">
+              Form Schema Generated & Saved to Disk
+            </span>
+            <h3 id="form-title" class="text-lg font-bold text-white">Form Title</h3>
+            <p id="form-desc" class="text-xs text-slate-400 mt-1 max-w-2xl"></p>
+          </div>
+          <div class="text-right">
+            <button id="btn-export-schema" class="text-xs px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center space-x-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              <span>Download Schema JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Badges -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div class="rounded-xl bg-slate-950/60 border border-slate-800/80 p-3">
+            <span class="text-xs text-slate-400">Total Questions</span>
+            <p id="badge-question-count" class="text-lg font-bold text-slate-100">0</p>
+          </div>
+          <div class="rounded-xl bg-slate-950/60 border border-slate-800/80 p-3">
+            <span class="text-xs text-slate-400">Form Sections</span>
+            <p id="badge-section-count" class="text-lg font-bold text-slate-100">1</p>
+          </div>
+          <div class="rounded-xl bg-slate-950/60 border border-slate-800/80 p-3">
+            <span class="text-xs text-slate-400">Likert / Grid Rows</span>
+            <p id="badge-grid-count" class="text-lg font-bold text-teal-400">0</p>
+          </div>
+          <div class="rounded-xl bg-slate-950/60 border border-slate-800/80 p-3">
+            <span class="text-xs text-slate-400">Submit Action</span>
+            <p class="text-xs font-mono text-indigo-400 truncate mt-1">/formResponse</p>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button id="btn-proceed-to-config" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold text-sm shadow-md transition-all flex items-center space-x-2">
+            <span>Configure Answers & Respondent Pool</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Configure Answers, Likert Counts & Scaling -->
+    <section id="section-config" class="hidden space-y-6">
+      
+      <!-- Respondent Target & Global Settings Bar -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl backdrop-blur-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-base font-bold text-slate-100">Respondent Scaling & Targets</h2>
+            <p class="text-xs text-slate-400">Set the target total of responses you want to submit.</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2">
+              <label for="input-target-respondents" class="text-xs font-semibold text-slate-300">Target Respondents:</label>
+              <input type="number" id="input-target-respondents" min="1" max="1000" value="50"
+                     class="w-20 bg-transparent text-right font-bold text-brand-400 focus:outline-none text-base">
+            </div>
+            <button id="btn-quick-fill-positive" class="text-xs px-3 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 transition-all font-medium">
+              ✨ Auto-Fill Positive Preset (4s & 5s)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variable Response Time Gaps & Intervals Card -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl backdrop-blur-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Timing & Gaps</span>
+              <h2 class="text-base font-bold text-slate-100">Custom Response Time Intervals</h2>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Specify how many respondents wait 5m, 2m, 30s, etc. If the sample counts do not sum to total respondents, FormPilot scales the pattern proportionally and shuffles them!</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button type="button" id="btn-preset-gaps-natural" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors">
+              Preset: Natural Mix (5m, 2m, 1m, 30s)
+            </button>
+            <button type="button" id="btn-preset-gaps-quick" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors">
+              Preset: Quick (2s, 5s, 10s)
+            </button>
+          </div>
+        </div>
+
+        <!-- Table of Delay Rules -->
+        <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/70 p-3">
+          <table class="w-full text-left text-xs">
+            <thead class="border-b border-slate-800 text-slate-400 font-semibold pb-2">
+              <tr>
+                <th class="p-2">Delay Duration</th>
+                <th class="p-2">Time Unit</th>
+                <th class="p-2">Sample Respondent Count</th>
+                <th class="p-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="delay-rules-tbody" class="divide-y divide-slate-800/40 text-slate-300">
+              <!-- populated dynamically -->
+            </tbody>
+          </table>
+          <div class="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-slate-800/60 mt-2">
+            <button type="button" id="btn-add-delay-rule" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors flex items-center space-x-1.5 self-start">
+              <span>+ Add Delay Interval</span>
+            </button>
+            <div class="flex items-center space-x-4 text-xs font-mono">
+              <span id="delay-summary-samples" class="text-slate-400">Sample Gaps: 0</span>
+              <span id="delay-summary-time" class="text-brand-400 font-bold">Est. Run Time: ~0m</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questions Container (Dynamically Populated) -->
+      <div id="questions-container" class="space-y-6">
+        <!-- Rendered question cards will appear here -->
+      </div>
+
+      <!-- Action Footer for Config -->
+      <div class="flex items-center justify-between pt-4">
+        <button id="btn-back-to-connect" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold transition-all">
+          ← Back to Form Scan
+        </button>
+        <button id="btn-generate-plan" class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-400 hover:to-indigo-500 text-slate-950 font-extrabold text-sm shadow-xl shadow-brand-500/20 transition-all flex items-center space-x-2">
+          <span>Generate & Analyze Respondent Plan</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Preview Shuffled Dataset & Summary -->
+    <section id="section-preview" class="hidden space-y-6">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl backdrop-blur-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-slate-100 flex items-center space-x-2">
+              <span>Respondent Dataset Preview</span>
+              <span id="preview-total-badge" class="px-2 py-0.5 rounded-full text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">50 Respondents</span>
+            </h2>
+            <p class="text-xs text-slate-400">Review your generated respondents. Notice how values are non-continuous and shuffled across respondents!</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button id="btn-reshuffle" class="text-xs px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Re-Shuffle Order</span>
+            </button>
+            <button id="btn-export-plan-json" class="text-xs px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300">
+              Export Plan JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80 max-h-96 custom-scrollbar">
+          <table id="preview-table" class="w-full text-left border-collapse text-xs">
+            <thead id="preview-thead" class="sticky top-0 bg-slate-900 border-b border-slate-800 text-slate-300 font-semibold uppercase tracking-wider">
+              <!-- Dynamically populated headers -->
+            </thead>
+            <tbody id="preview-tbody" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+          <button id="btn-back-to-adjust" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold">
+            ← Edit Configuration
+          </button>
+          <button id="btn-proceed-to-execute" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition-all flex items-center space-x-2">
+            <span>Proceed to Live Execution</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Live Execution Console -->
+    <section id="section-execute" class="hidden space-y-6">
+      
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl backdrop-blur-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-base font-bold text-slate-100 flex items-center space-x-2">
+              <span>Live Submission Control Console</span>
+              <span id="engine-status-pill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                Ready
+              </span>
+            </h2>
+            <p class="text-xs text-slate-400">Submissions execute locally with safe random delay jitter to prevent IP rate-limiting.</p>
+          </div>
+          <!-- Timing settings -->
+          <div class="flex items-center space-x-3 text-xs bg-slate-950 border border-slate-800 p-2.5 rounded-xl">
+            <span class="text-slate-400 font-medium">Delay Between Responses:</span>
+            <input type="number" id="input-min-delay" value="1.0" step="0.5" min="0.2" class="w-14 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-center text-brand-300 font-mono">
+            <span class="text-slate-500">to</span>
+            <input type="number" id="input-max-delay" value="2.5" step="0.5" min="0.5" class="w-14 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-center text-brand-300 font-mono">
+            <span class="text-slate-500">sec</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar and Counters -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between text-xs font-semibold">
+            <span class="text-slate-300">Progress: <span id="counter-current" class="text-brand-400 font-mono">0</span> / <span id="counter-total" class="font-mono">50</span> respondents</span>
+            <span id="counter-percent" class="text-brand-400 font-mono">0%</span>
+          </div>
+          <div class="w-full h-3 rounded-full bg-slate-950 border border-slate-800 overflow-hidden relative">
+            <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-brand-500 to-indigo-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Live Gap Interval Countdown Banner -->
+        <div id="live-countdown-banner" class="hidden rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-4 items-center justify-between transition-all">
+          <div class="flex items-center space-x-3">
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-indigo-200">Simulating Natural Human Time Gap</p>
+              <p id="countdown-status-text" class="text-[11px] text-indigo-300/80">Waiting before next respondent submission...</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span id="countdown-timer-display" class="font-mono text-2xl font-extrabold text-indigo-300">00:00</span>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="rounded-xl bg-slate-950/70 border border-slate-800/80 p-3.5 text-center">
+            <span class="text-xs text-slate-400">Successful</span>
+            <p id="counter-success" class="text-xl font-bold text-emerald-400 font-mono mt-0.5">0</p>
+          </div>
+          <div class="rounded-xl bg-slate-950/70 border border-slate-800/80 p-3.5 text-center">
+            <span class="text-xs text-slate-400">Failed</span>
+            <p id="counter-failed" class="text-xl font-bold text-rose-400 font-mono mt-0.5">0</p>
+          </div>
+          <div class="rounded-xl bg-slate-950/70 border border-slate-800/80 p-3.5 text-center">
+            <span class="text-xs text-slate-400">Remaining</span>
+            <p id="counter-remaining" class="text-xl font-bold text-slate-300 font-mono mt-0.5">0</p>
+          </div>
+        </div>
+
+        <!-- Completion Action Controls (Shown when completed) -->
+        <div id="completion-actions-card" class="hidden rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 backdrop-blur-sm space-y-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-emerald-200">All Responses Successfully Submitted!</h3>
+              <p class="text-xs text-emerald-300/80">Every respondent has been generated, shuffled, and recorded in your Google Form.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 pt-1">
+            <button id="btn-rerun-automation" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 transition-all flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Re-Run Automation</span>
+            </button>
+            <button id="btn-change-rating" class="px-4 py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/40 text-indigo-200 border border-indigo-500/30 font-bold text-xs transition-all flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+              <span>Change Rating / Responses</span>
+            </button>
+            <button id="btn-nav-home" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition-all flex items-center space-x-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              <span>Home / Connect New Form</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center justify-center space-x-3 pt-2">
+          <button id="btn-start-automation" class="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+            <span>Start Automated Submission</span>
+          </button>
+          <button id="btn-pause-automation" disabled class="px-5 py-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            Pause
+          </button>
+          <button id="btn-stop-automation" disabled class="px-5 py-2.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            Stop / Abort
+          </button>
+        </div>
+
+        <!-- Live Terminal Logs -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">Console Activity Stream</span>
+            <span class="text-[10px] text-slate-500 font-mono">Auto-scrolling</span>
+          </div>
+          <div id="log-terminal" class="h-48 overflow-y-auto rounded-xl bg-slate-950 border border-slate-800 p-3 font-mono text-xs space-y-1 custom-scrollbar text-slate-300">
+            <p class="text-slate-600 italic">Ready for commands...</p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- CONFIRMATION / PATTERN EXTRAPOLATION WARNING MODAL -->
+  <div id="modal-extrapolate-warning" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-scaleUp">
+      
+      <div class="flex items-start space-x-3.5">
+        <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-base font-bold text-amber-200">Sample Answers Pattern Scaling Notice</h3>
+          <p class="text-xs text-amber-300/80">Extrapolation and Shuffle Confirmation</p>
+        </div>
+      </div>
+
+      <div class="rounded-xl bg-slate-950 border border-slate-800 p-4 space-y-3 text-xs text-slate-300 leading-relaxed">
+        <p>
+          You entered a limited sample of answers (e.g. 5 total), but you requested <strong id="modal-target-count" class="text-brand-400 font-bold">50</strong> respondents.
+        </p>
+        <p class="text-slate-400">
+          <strong>How FormPilot will handle this:</strong>
+        </p>
+        <ul class="list-disc pl-4 space-y-1.5 text-slate-300">
+          <li>The system will preserve your exact ratio distribution (e.g. 2 for 5, 3 for 4, 1 for 3) and extrapolate it across all respondents.</li>
+          <li><strong>Only</strong> the rating values you specified will be used (unpicked ratings stay at 0).</li>
+          <li>Once generated, the system will <strong>completely shuffle</strong> the answers across all respondents so there is no repetitive or sequential pattern!</li>
+        </ul>
+      </div>
+
+      <div id="modal-warning-list" class="max-h-32 overflow-y-auto space-y-1 text-xs font-mono text-slate-400 custom-scrollbar">
+        <!-- populated with details -->
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-2">
+        <button id="btn-modal-cancel" class="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+          Cancel & Adjust Counts
+        </button>
+        <button id="btn-modal-agree" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-400 hover:to-indigo-500 text-slate-950 font-bold text-xs shadow-lg shadow-brand-500/20">
+          Agree & Recreate Pattern
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+
