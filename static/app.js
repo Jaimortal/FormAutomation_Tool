@@ -13,6 +13,7 @@ let currentDelayRules = [
 
 document.addEventListener("DOMContentLoaded", () => {
   initEventListeners();
+  initAiChat();
 });
 
 function initEventListeners() {
@@ -1073,5 +1074,148 @@ function downloadBlob(content, filename, contentType) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// 6. Groq AI Assistant Controller
+let aiChatHistory = [];
+
+function initAiChat() {
+  const toggleBtn = document.getElementById("btn-toggle-ai-chat");
+  const closeBtn = document.getElementById("btn-close-ai-chat");
+  const chatWindow = document.getElementById("ai-chat-window");
+  const sendBtn = document.getElementById("btn-send-ai-chat");
+  const chatInput = document.getElementById("ai-chat-input");
+  const chips = document.querySelectorAll(".ai-chip");
+
+  if (!toggleBtn || !chatWindow) return;
+
+  toggleBtn.addEventListener("click", () => {
+    chatWindow.classList.toggle("hidden");
+    if (!chatWindow.classList.contains("hidden")) {
+      chatInput.focus();
+    }
+  });
+
+  closeBtn.addEventListener("click", () => {
+    chatWindow.classList.add("hidden");
+  });
+
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      const prompt = chip.dataset.prompt;
+      if (prompt) {
+        chatInput.value = prompt;
+        handleSendAiMessage();
+      }
+    });
+  });
+
+  sendBtn.addEventListener("click", handleSendAiMessage);
+  chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendAiMessage();
+    }
+  });
+}
+
+async function handleSendAiMessage() {
+  const input = document.getElementById("ai-chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = "";
+  appendAiMessage("user", text);
+  aiChatHistory.push({ role: "user", content: text });
+
+  const typing = document.getElementById("ai-typing-indicator");
+  if (typing) typing.classList.remove("hidden");
+  scrollAiChatToBottom();
+
+  try {
+    const res = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: aiChatHistory })
+    });
+
+    const data = await res.json();
+    if (typing) typing.classList.add("hidden");
+
+    if (data.success && data.reply) {
+      appendAiMessage("assistant", data.reply);
+      aiChatHistory.push({ role: "assistant", content: data.reply });
+    } else {
+      appendAiMessage("assistant", `⚠️ **AI Notice:** ${data.error || "Unable to reach Groq API."}`);
+    }
+  } catch (err) {
+    if (typing) typing.classList.add("hidden");
+    appendAiMessage("assistant", `⚠️ **Network Error:** ${err.message}`);
+  }
+
+  scrollAiChatToBottom();
+}
+
+function appendAiMessage(role, text) {
+  const container = document.getElementById("ai-chat-messages");
+  if (!container) return;
+
+  const msgDiv = document.createElement("div");
+  if (role === "user") {
+    msgDiv.className = "flex items-start justify-end space-x-2";
+    msgDiv.innerHTML = `
+      <div class="rounded-xl bg-indigo-600/90 text-white p-2.5 max-w-[85%] text-xs leading-relaxed break-words shadow-sm">
+        ${escapeHtml(text)}
+      </div>
+      <div class="w-6 h-6 rounded-lg bg-indigo-500/30 text-indigo-300 flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">
+        U
+      </div>
+    `;
+  } else {
+    msgDiv.className = "flex items-start space-x-2";
+    msgDiv.innerHTML = `
+      <div class="w-6 h-6 rounded-lg bg-brand-500/30 text-brand-300 flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">
+        AI
+      </div>
+      <div class="rounded-xl bg-slate-800/90 text-slate-200 p-2.5 max-w-[85%] text-xs leading-relaxed break-words border border-slate-700/60 shadow-sm">
+        ${formatAiMarkdown(text)}
+      </div>
+    `;
+  }
+
+  container.appendChild(msgDiv);
+}
+
+function escapeHtml(str) {
+  const p = document.createElement("p");
+  p.textContent = str;
+  return p.innerHTML;
+}
+
+function formatAiMarkdown(text) {
+  if (!text) return "";
+  let html = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Code blocks
+  html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-slate-950 p-2 rounded text-[11px] font-mono overflow-x-auto my-1 border border-slate-800">$1</pre>');
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, '<code class="bg-slate-950 text-brand-300 px-1 py-0.5 rounded font-mono text-[10px]">$1</code>');
+  // Bold
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Lists
+  html = html.replace(/^\s*[-*]\s+(.*)$/gm, '<li class="ml-3 list-disc">$1</li>');
+  // Newlines
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function scrollAiChatToBottom() {
+  const container = document.getElementById("ai-chat-messages");
+  if (container) {
+    container.scrollTop = container.scrollHeight;
+  }
 }
 

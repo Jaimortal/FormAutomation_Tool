@@ -36,6 +36,26 @@ Runs **100% locally on your machine** — no external servers, database installa
 | **UI Styling** | **Tailwind CSS** | CDN (Tailwind 3) | Modern dark-mode layout, responsive cards, modals, and design system |
 | **Typography & Icons** | **Google Fonts & SVG** | Inter, JetBrains Mono | High-legibility typography and visual indicators |
 | **Windows Launcher** | **Batch Script (.bat)**| Windows CMD | One-click local application startup without terminal commands |
+| **AI LLM Engine** | **Groq API** | `openai/gpt-oss-20b` | Built-in AI Copilot grounded in the FormPilot System Knowledge Base |
+
+---
+
+## 🤖 FormPilot AI Copilot (Groq Integration)
+
+FormPilot includes a floating, built-in **AI Copilot** accessible from the bottom-right of the interface. It is powered by the **Groq API** using the model **`openai/gpt-oss-20b`** and is grounded in [`system_knowledge.json`](file:///c:/School%20Related%20File/Portfolio%20project/Self%20project%20automation%20tool/testing%201/system_knowledge.json).
+
+### How to Enable the AI Copilot:
+1. Copy the example environment file:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+2. Open `.env` and add your Groq API key:
+   ```env
+   GROQ_API_KEY=gsk_your_actual_key_here
+   GROQ_MODEL=openai/gpt-oss-20b
+   ```
+3. Your real `.env` file is protected by `.gitignore` and will never be committed to Git.
+4. Open the web app and click the **"FormPilot AI Helper"** pill at the bottom-right corner to ask any question about operating, configuring, or troubleshooting FormPilot!
 
 ---
 
@@ -47,6 +67,10 @@ testing 1/
 ├── form_parser.py             # Google Form parser, schema extractor & URL normalizer
 ├── generator.py               # Pattern scaling algorithm, shuffling & delay scheduler
 ├── submitter.py               # Threaded background submitter with safety timeouts & countdown
+├── ai_assistant.py            # Groq API client with system knowledge prompt grounding
+├── system_knowledge.json      # Structured knowledge base about FormPilot operations
+├── .env.example               # Template environment configuration file
+├── .gitignore                 # Protects .env, virtual environments & temporary files
 ├── start.bat                  # 1-click Windows launcher
 ├── requirements.txt           # Python package dependencies
 ├── templates/

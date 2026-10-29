@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, render_template, send_from_directory
 from form_parser import parse_google_form
 from generator import generate_respondents_dataset, calculate_scaled_distribution
 from submitter import submitter_instance
+from ai_assistant import ask_groq_assistant
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -219,6 +220,18 @@ def api_export_config():
     with open("user_config.json", "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
     return jsonify({"success": True, "message": "Saved config to user_config.json"})
+
+
+@app.route("/api/ai/chat", methods=["POST"])
+def api_ai_chat():
+    data = request.json or {}
+    messages = data.get("messages", [])
+    if not messages:
+        return jsonify({"success": False, "error": "No messages provided."}), 400
+
+    result = ask_groq_assistant(messages)
+    status_code = 200 if result.get("success") else 400
+    return jsonify(result), status_code
 
 
 if __name__ == "__main__":

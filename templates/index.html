@@ -507,6 +507,92 @@
     </div>
   </div>
 
+  <!-- FLOATING AI ASSISTANT WIDGET (BOTTOM-RIGHT) -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    
+    <!-- Expandable Chat Window -->
+    <div id="ai-chat-window" class="hidden mb-3 w-96 max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl bg-slate-900/95 border border-slate-700/80 shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl animate-scaleUp">
+      <!-- Chat Header -->
+      <div class="p-3.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <h4 class="text-xs font-bold text-slate-100">FormPilot AI Copilot</h4>
+              <span class="px-1.5 py-0.5 rounded text-[9px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Groq</span>
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">openai/gpt-oss-20b</p>
+          </div>
+        </div>
+        <button id="btn-close-ai-chat" class="w-7 h-7 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center text-sm transition-colors">
+          &times;
+        </button>
+      </div>
+
+      <!-- Quick Question Chips -->
+      <div class="p-2.5 bg-slate-950/40 border-b border-slate-800/60 flex items-center space-x-1.5 overflow-x-auto custom-scrollbar text-[11px] select-none">
+        <button class="ai-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap shrink-0 transition-colors" data-prompt="How does Likert scaling work?">
+          ⚡ Likert Scaling?
+        </button>
+        <button class="ai-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap shrink-0 transition-colors" data-prompt="How to set up department text shuffling?">
+          🏫 Department Pool?
+        </button>
+        <button class="ai-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap shrink-0 transition-colors" data-prompt="How to set variable delay gaps?">
+          ⏱️ Delay Intervals?
+        </button>
+        <button class="ai-chip px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 whitespace-nowrap shrink-0 transition-colors" data-prompt="Why is my Google Form returning 404 or Sign-in required?">
+          ⚠️ Fix 404 / Login
+        </button>
+      </div>
+
+      <!-- Messages Stream Area -->
+      <div id="ai-chat-messages" class="flex-1 p-3.5 overflow-y-auto space-y-3 custom-scrollbar text-xs">
+        <!-- Initial Welcome Message -->
+        <div class="flex items-start space-x-2">
+          <div class="w-6 h-6 rounded-lg bg-indigo-600/30 text-indigo-400 flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">
+            AI
+          </div>
+          <div class="rounded-xl bg-slate-800/80 p-3 text-slate-200 border border-slate-700/60 space-y-1.5 leading-relaxed">
+            <p><strong>Hello! I'm your FormPilot Copilot.</strong></p>
+            <p class="text-slate-300 text-[11px]">I am powered by Groq and trained on the FormPilot Knowledge Base. Ask me anything about configuring Likert scales, setting time delays, or troubleshooting Google Form settings!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div id="ai-typing-indicator" class="hidden px-4 py-2 bg-slate-900 text-[11px] text-slate-400 flex items-center space-x-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce [animation-delay:0.2s]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-bounce [animation-delay:0.4s]"></span>
+        <span>FormPilot AI is thinking...</span>
+      </div>
+
+      <!-- Chat Input Footer -->
+      <div class="p-3 bg-slate-950/90 border-t border-slate-800 flex items-center space-x-2">
+        <input type="text" id="ai-chat-input" placeholder="Ask about FormPilot operations..."
+               class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+        <button id="btn-send-ai-chat" class="w-8 h-8 rounded-xl bg-brand-500 hover:bg-brand-400 text-slate-950 flex items-center justify-center transition-colors shrink-0 font-bold shadow-md shadow-brand-500/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Floating Toggle Button -->
+    <button id="btn-toggle-ai-chat" class="px-4 py-3 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs shadow-xl shadow-brand-600/30 transition-all flex items-center space-x-2 select-none group">
+      <div class="relative flex h-3 w-3">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-300 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-teal-400"></span>
+      </div>
+      <span>FormPilot AI Helper</span>
+      <svg class="w-4 h-4 text-indigo-200 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+      </svg>
+    </button>
+
+  </div>
+
   <script src="/static/app.js"></script>
 </body>
 </html>

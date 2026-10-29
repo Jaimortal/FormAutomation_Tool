@@ -1,206 +1,78 @@
 {
-  "title": "AI-POWERED STUDENT ASSISTANCE CHATBOT USING NATURAL LANGUAGE PROCESSING FOR BUKSU",
-  "description": "Dear Respondent,\nYou are invited to participate in a study evaluating the AI-Based Help Desk Chatbot System developed for Bukidnon State University students. This questionnaire aims to assess the system in terms of its usability, accuracy, and effectiveness as a student assistance tool. Please answer each item based on your actual experience using the chatbot.\nYour responses will be treated with strict confidentiality and used solely for academic purposes. There are no right or wrong answers kindly answer as honestly as possible.\nThank you very much for your time and cooperation.\nThe Researchers",
-  "submit_url": "https://docs.google.com/forms/d/e/1FAIpQLSd2H-M1_xdXwOISiwNrIec1NMg2nzOp8DlLaLbwduMY9_N4bw/formResponse",
+  "title": "College Academic & Faculty Evaluation Survey",
+  "description": "Annual student feedback on department performance and faculty competence.",
+  "submit_url": "https://docs.google.com/forms/d/e/1FAIpQLSc_SAMPLE_FORM_ID/formResponse",
   "sections": [
     0,
-    1,
-    2,
-    3
+    1
   ],
-  "page_history": "0,1,2,3",
+  "page_history": "0,1",
   "questions": [
     {
-      "id": "866121119",
-      "title": "Part I. Respondent's Profile \u2014 College/Department (Required):",
-      "description": "",
-      "type": "choice",
-      "subtype": "multiple_choice",
-      "entry_id": "entry.1081550492",
-      "options": [
+      "id": "1001",
+      "title": "College Department",
+      "description": "Please specify your college / department name or abbreviation.",
+      "type": "text",
+      "subtype": "short_answer",
+      "entry_id": "entry.1001001",
+      "section": 0,
+      "default_pool": [
         "COT",
+        "College of Technology",
+        "College of Business",
         "COB",
+        "College of Engineering",
         "COE",
-        "CAS",
-        "CPAG",
-        "CON",
-        "COM",
-        "LAW",
-        "Incoming first year Student of buksu"
-      ],
-      "section": 0
+        "College of Arts and Sciences",
+        "CAS"
+      ]
     },
     {
-      "id": "1318848155",
-      "title": "A.1 System Usability Scale (SUS)",
-      "description": "",
-      "type": "multiple_choice_grid",
-      "columns": [
-        "5",
-        "4",
-        "3",
+      "id": "1002",
+      "title": "Overall Academic Experience",
+      "description": "Rate your overall satisfaction with the curriculum (1 to 5)",
+      "type": "linear_scale",
+      "entry_id": "entry.1002001",
+      "options": [
+        "1",
         "2",
-        "1"
-      ],
-      "rows": [
-        {
-          "entry_id": "entry.1548686410",
-          "row_title": "I think I would like to use this system often."
-        },
-        {
-          "entry_id": "entry.1411715646",
-          "row_title": "I found the system more complicated than necessary."
-        },
-        {
-          "entry_id": "entry.1674000096",
-          "row_title": "I thought the system was easy to use."
-        },
-        {
-          "entry_id": "entry.504580031",
-          "row_title": "I think I would need help from a technical person to use this system."
-        },
-        {
-          "entry_id": "entry.1254994178",
-          "row_title": "I found that the different functions in this system work well together."
-        },
-        {
-          "entry_id": "entry.532380380",
-          "row_title": "I thought the system was not consistent in how it worked."
-        },
-        {
-          "entry_id": "entry.1028114170",
-          "row_title": "I think most people would learn to use this system very quickly."
-        },
-        {
-          "entry_id": "entry.175868377",
-          "row_title": "I found the system very convenient to use."
-        },
-        {
-          "entry_id": "entry.1631397571",
-          "row_title": "I felt very confident using the system."
-        },
-        {
-          "entry_id": "entry.157066303",
-          "row_title": "I needed to learn many things before I could start using this system."
-        }
+        "3",
+        "4",
+        "5"
       ],
       "section": 1
     },
     {
-      "id": "1080987058",
-      "title": "A.2 Additional User Satisfaction and Acceptance",
-      "description": "",
+      "id": "1003",
+      "title": "Faculty Competence (Likert Scale Grid)",
+      "description": "Evaluate faculty performance across key metrics.",
       "type": "multiple_choice_grid",
+      "section": 1,
       "columns": [
-        "5",
-        "4",
-        "3",
-        "2",
-        "1"
+        "1 - Strongly Disagree",
+        "2 - Disagree",
+        "3 - Neutral",
+        "4 - Agree",
+        "5 - Strongly Agree"
       ],
       "rows": [
         {
-          "entry_id": "entry.1026989631",
-          "row_title": "Overall, I am satisfied with the AI-Based Help Desk Chatbot System."
+          "entry_id": "entry.1003001",
+          "row_title": "Subject Mastery & Knowledge"
         },
         {
-          "entry_id": "entry.1611858300",
-          "row_title": "I would use the chatbot again when I need university-related information."
+          "entry_id": "entry.1003002",
+          "row_title": "Punctuality & Class Attendance"
         },
         {
-          "entry_id": "entry.1016903692",
-          "row_title": "I would recommend the chatbot to other BukSU students."
+          "entry_id": "entry.1003003",
+          "row_title": "Fairness in Grading & Evaluation"
+        },
+        {
+          "entry_id": "entry.1003004",
+          "row_title": "Clarity of Instruction & Explanations"
         }
-      ],
-      "section": 1
-    },
-    {
-      "id": "1701982271",
-      "title": "B. Accuracy (User-Perceived Accuracy)",
-      "description": "",
-      "type": "multiple_choice_grid",
-      "columns": [
-        "5",
-        "4",
-        "3",
-        "2",
-        "1"
-      ],
-      "rows": [
-        {
-          "entry_id": "entry.1463605824",
-          "row_title": "The chatbot gives correct information for my university-related questions."
-        },
-        {
-          "entry_id": "entry.1099643175",
-          "row_title": "The chatbot's answers match available BUKSU information."
-        },
-        {
-          "entry_id": "entry.1524519368",
-          "row_title": "The chatbot understands what I mean when I ask questions in English or Bisaya/Cebuano."
-        },
-        {
-          "entry_id": "entry.66162383",
-          "row_title": "For location questions, the chatbot shows the correct campus location for the place I requested."
-        }
-      ],
-      "section": 2
-    },
-    {
-      "id": "1546241846",
-      "title": "C. Effectiveness",
-      "description": "",
-      "type": "multiple_choice_grid",
-      "columns": [
-        "5",
-        "4",
-        "3",
-        "2",
-        "1"
-      ],
-      "rows": [
-        {
-          "entry_id": "entry.784244194",
-          "row_title": "The chatbot helps me get university-related information quickly."
-        },
-        {
-          "entry_id": "entry.673474196",
-          "row_title": "The chatbot helps me find university offices and facilities."
-        },
-        {
-          "entry_id": "entry.1381197821",
-          "row_title": "The chatbot does not help me understand university-related information."
-        },
-        {
-          "entry_id": "entry.128663622",
-          "row_title": "The map feature helps me find the location I selected."
-        },
-        {
-          "entry_id": "entry.71338130",
-          "row_title": "The chatbot does not provide useful information for my needs."
-        },
-        {
-          "entry_id": "entry.1708298708",
-          "row_title": "The chatbot is effective as a student assistance tool."
-        },
-        {
-          "entry_id": "entry.238584784",
-          "row_title": "The chatbot does not meet my needs as a student."
-        },
-        {
-          "entry_id": "entry.547512411",
-          "row_title": "The chatbot provides information that is clear and easy to follow."
-        },
-        {
-          "entry_id": "entry.2091414522",
-          "row_title": "The chatbot sometimes gives answers that are not related to what I asked."
-        },
-        {
-          "entry_id": "entry.1390512162",
-          "row_title": "The chatbot understands and responds correctly to questions in Bisaya/Cebuano."
-        }
-      ],
-      "section": 3
+      ]
     }
   ]
 }
