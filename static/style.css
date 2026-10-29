@@ -51,3 +51,123 @@
   border-color: rgba(99, 102, 241, 0.6);
 }
 
+/* AI Chat Markdown & Table Formatting */
+.ai-chat-content {
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+.ai-chat-content p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.ai-chat-content p:first-child {
+  margin-top: 0;
+}
+
+.ai-chat-content p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-chat-content h1, 
+.ai-chat-content h2, 
+.ai-chat-content h3, 
+.ai-chat-content h4 {
+  font-weight: 700;
+  color: #f8fafc;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.ai-chat-content ul, 
+.ai-chat-content ol {
+  padding-left: 1.15rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.ai-chat-content li {
+  list-style-type: disc;
+  margin-bottom: 0.2rem;
+}
+
+.ai-chat-content ol li {
+  list-style-type: decimal;
+}
+
+.ai-chat-content strong {
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.ai-chat-content code {
+  background: rgba(15, 23, 42, 0.9);
+  color: #5eead4;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  border: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+.ai-chat-content pre {
+  background: #020617;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.4rem 0;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.ai-chat-content pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.ai-chat-content blockquote {
+  border-left: 3px solid #6366f1;
+  padding-left: 0.6rem;
+  margin: 0.4rem 0;
+  color: #94a3b8;
+  font-style: italic;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 0 0.35rem 0.35rem 0;
+}
+
+/* AI Chat Tables */
+.ai-chat-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 0.72rem;
+  display: block;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+}
+
+.ai-chat-content th, 
+.ai-chat-content td {
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  padding: 0.35rem 0.55rem;
+  text-align: left;
+}
+
+.ai-chat-content th {
+  background-color: rgba(15, 23, 42, 0.95);
+  color: #2dd4bf;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+}
+
+.ai-chat-content tr:nth-child(even) {
+  background-color: rgba(30, 41, 59, 0.3);
+}
+  border-color: rgba(99, 102, 241, 0.6);
+}
+

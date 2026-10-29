@@ -1177,8 +1177,8 @@ function appendAiMessage(role, text) {
       <div class="w-6 h-6 rounded-lg bg-brand-500/30 text-brand-300 flex items-center justify-center text-xs shrink-0 mt-0.5 font-bold">
         AI
       </div>
-      <div class="rounded-xl bg-slate-800/90 text-slate-200 p-2.5 max-w-[85%] text-xs leading-relaxed break-words border border-slate-700/60 shadow-sm">
-        ${formatAiMarkdown(text)}
+      <div class="rounded-xl bg-slate-800/90 text-slate-200 p-3 max-w-[90%] text-xs leading-relaxed break-words border border-slate-700/60 shadow-sm overflow-hidden">
+        <div class="ai-chat-content">${formatAiMarkdown(text)}</div>
       </div>
     `;
   }
@@ -1194,20 +1194,30 @@ function escapeHtml(str) {
 
 function formatAiMarkdown(text) {
   if (!text) return "";
+  
+  // Use marked.js if available for complete GitHub-flavored Markdown & table support
+  if (typeof marked !== "undefined" && marked.parse) {
+    try {
+      marked.setOptions({
+        gfm: true,
+        breaks: true
+      });
+      return marked.parse(text);
+    } catch (e) {
+      console.warn("Marked parser fallback:", e);
+    }
+  }
+
+  // Fallback formatter
   let html = text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  // Code blocks
   html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-slate-950 p-2 rounded text-[11px] font-mono overflow-x-auto my-1 border border-slate-800">$1</pre>');
-  // Inline code
   html = html.replace(/`([^`]+)`/g, '<code class="bg-slate-950 text-brand-300 px-1 py-0.5 rounded font-mono text-[10px]">$1</code>');
-  // Bold
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  // Lists
   html = html.replace(/^\s*[-*]\s+(.*)$/gm, '<li class="ml-3 list-disc">$1</li>');
-  // Newlines
   html = html.replace(/\n/g, '<br>');
   return html;
 }

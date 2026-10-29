@@ -1,76 +1,24 @@
 {
   "system_name": "FormPilot",
-  "system_description": "An intelligent, local Google Forms automation studio that scans form structures, configures custom Likert and text data pools, algorithmically extrapolates sample response patterns, and executes automated submissions with humanized variable delay intervals.",
-  "deployment_mode": "100% Local (runs on http://127.0.0.1:5000 with Python Flask, no cloud deployment required)",
-  "prerequisites": {
-    "google_form_requirements": [
-      "The Google Form MUST be public (accessible to anyone with the link).",
-      "'Limit to 1 response' in Google Form settings MUST be turned OFF (turning this on requires Google account login, which blocks direct automated submissions).",
-      "'Restrict to users in [Organization]' MUST be turned OFF.",
-      "The form should not have CAPTCHA plugins or account login walls."
-    ],
-    "supported_url_formats": [
-      "https://docs.google.com/forms/d/e/.../viewform",
-      "https://forms.gle/... (shortened links are automatically followed and resolved)",
-      "https://docs.google.com/forms/d/.../edit (editor links are normalized)",
-      "https://docs.google.com/forms/d/e/.../prefill (pre-filled links)"
-    ]
+  "open_source": true,
+  "deployment": "100% Local (http://127.0.0.1:5000, Flask)",
+  "faq": {
+    "are_responses_real_human": "NO. Responses are automated machine submissions, NOT real humans. They are engineered to SIMULATE natural human patterns using shuffled text pools, proportional Likert extrapolation, anti-streak shuffling, and variable delays with ±4% jitter.",
+    "does_system_use_ai_for_form_answers": "NO. The AI (Groq) is ONLY for this copilot help chat. Form answers are generated mathematically (Largest Remainder Method) and submitted via direct HTTP POST requests.",
+    "how_are_responses_created": "FormPilot uses: 1) User-configured text pools (e.g. COT, COB) for text fields, 2) Proportional scaling of user sample rating counts (e.g. 5:2, 4:3, 3:1) using the Largest Remainder Method, and 3) Global shuffling across respondents.",
+    "no_sample_provided": "If no sample counts are provided, FormPilot distributes answers uniformly across available choices, or you can click 'Auto-Fill Positive Preset (4s & 5s)'.",
+    "why_cant_it_read_google_form": "The form is likely private, restricted to organization users only, or has 'Limit to 1 response' enabled (which forces Google login). Fix: Turn OFF 'Limit to 1 response' and organization restrictions in Form Settings, then copy link from Send -> Link.",
+    "what_delay_means": "The delay is the gap FormPilot waits between submitting each respondent to prevent IP rate limits and simulate real-time submission pacing.",
+    "non_google_forms": "NO. FormPilot is exclusively built for Google Forms (docs.google.com/forms and forms.gle). Other platforms like Typeform or Microsoft Forms are not supported.",
+    "limitations": "Only public Google Forms (no sign-in or organization restrictions), no CAPTCHA/file upload questions, Google Forms only, and server-side submission timestamp clock cannot be faked via HTTP POST (must edit Column A in the linked Google Sheet for past dates).",
+    "is_open_source": "YES. FormPilot is 100% open-source, running locally on your computer with Python and Flask.",
+    "where_to_put_target_respondents": "In Step 2 ('Configure & Scale'). After scanning in Step 1, click 'Configure Answers & Respondent Pool' (or click Step 2 in the top bar). The 'Target Respondents' box is right at the top.",
+    "supports_essays_and_other_styles": "YES. Supports Short Answer, Paragraph/Essay, Multiple Choice, Checkboxes, Linear Scale (1-5), and Multiple-Choice Grids. Text fields use user-defined text variation pools."
   },
-  "core_features_and_modules": {
-    "step_1_connect_and_scan": {
-      "function": "Scans Google Form structure automatically by reading the page and extracting Google's embedded FB_PUBLIC_LOAD_DATA_ object.",
-      "extracted_data": [
-        "Form title and description",
-        "Form submission endpoint (/formResponse)",
-        "Sections count and pageHistory navigation string (e.g., '0,1,2,3')",
-        "Question entry IDs (entry.XXXXXXXX), question titles, descriptions, and types",
-        "Multiple-Choice Grid evaluation rows and scale options (1 to 5, or descriptive)"
-      ],
-      "fallback": "Allows raw HTML source pasting if local network restricts direct scraping."
-    },
-    "step_2_configure_and_scale": {
-      "target_respondents": "User inputs desired total respondents (e.g. 50, 100, etc.).",
-      "text_pools_shuffling": {
-        "purpose": "Used for typed text questions like College Department.",
-        "behavior": "User defines variation tags (e.g., 'COT', 'College of Technologies', 'COB', 'College of Business', 'CAS', etc.). The system randomly and evenly distributes these across respondents so answers never appear repetitive."
-      },
-      "likert_scale_and_grid_scaling": {
-        "purpose": "Allows user to provide sample distribution counts for each rating (e.g., 2 for '5', 3 for '4', 1 for '3').",
-        "sample_vs_target_logic": "If user provides only a small sample (e.g. total 6 sample answers) and requests 50 respondents, the system detects this and triggers the Pattern Scaling Confirmation Modal.",
-        "mathematical_algorithm": "Uses the Largest Remainder Method (Hare-Niemeyer Algorithm). Proportions of user's sample choices are calculated. Ratings not picked by user (e.g. 1 and 2) remain strictly at 0%. Proportions are scaled to target respondents so the integer sum matches exactly.",
-        "anti_streak_shuffling": "All generated ratings are globally shuffled across respondents to ensure no continuous, predictable, or robotic streaks exist in the survey submission."
-      },
-      "variable_time_intervals": {
-        "purpose": "Simulates natural human respondent timing gaps instead of robotically submitting all responses at once.",
-        "configuration": "User can add custom delay rules (e.g., 5 min -> 2 respondents, 2 min -> 3 respondents, 30 sec -> 1 respondent).",
-        "scaling_and_jitter": "Delay rules are proportionally scaled to match total gap intervals (target_respondents - 1), shuffled randomly, and given ±4% human jitter so no two delays are identical."
-      }
-    },
-    "step_3_preview_and_verify": {
-      "tabular_preview": "Displays the complete generated respondent dataset table before submitting anything.",
-      "re_shuffle": "Allows user to re-randomize the dataset order with a single click.",
-      "export": "Allows downloading the dataset plan as a JSON file."
-    },
-    "step_4_live_execution": {
-      "progress_tracking": "Displays real-time progress bar, percentage, successful count, failed count, and remaining count.",
-      "countdown_timer": "Displays a live MM:SS countdown banner showing the remaining sleep time before the next respondent is submitted.",
-      "controls": "Live Pause, Resume, and Stop/Abort buttons with sub-second responsiveness (sleeps in 0.3s interruptible ticks).",
-      "completion_actions": [
-        "Re-Run Automation: Restarts submission with 1 click.",
-        "Change Rating / Responses: Returns to Step 2 to edit Likert ratings, text pools, delays, or respondent counts.",
-        "Home / Connect New Form: Returns to Step 1 to scan a new Google Form."
-      ]
-    }
-  },
-  "troubleshooting_and_common_errors": {
-    "http_404_not_found": "Occurs if the URL query parameter was malformed or the form is deleted/private. Ensure the link is copied from 'Send' -> 'Link' tab in Google Forms.",
-    "sign_in_required_or_permission_denied": "Occurs when 'Limit to 1 response' or organization domain restriction is turned on in Google Forms settings. Must be toggled off by the form owner.",
-    "timestamp_in_google_sheets": "Google Form generates server-side timestamps upon HTTP arrival. To change timestamps to past dates/weeks for thesis/academic reporting, modify Column A in the linked Google Sheet (e.g. using the provided Google Apps Script in README)."
-  },
-  "technical_stack": {
-    "language": "Python 3.10+ (backend), JavaScript ES6+ (frontend)",
-    "frameworks": "Flask (REST API server), Tailwind CSS (UI styling)",
-    "http_handling": "Requests library with isolated connections (Connection: close) and dual connect/read timeouts to prevent keep-alive socket hanging."
+  "workflow_steps": {
+    "step_1": "Connect & Scan public Google Form URL (extracts questions, entry IDs, Likert grids).",
+    "step_2": "Configure target respondents, text variation pools, Likert rating sample counts, and custom delay intervals.",
+    "step_3": "Preview dataset table, re-shuffle order, or export plan JSON.",
+    "step_4": "Live execution with progress bar, countdown timer, Pause/Stop controls, and completion menu (Re-Run, Change Rating, Home)."
   }
 }
-
